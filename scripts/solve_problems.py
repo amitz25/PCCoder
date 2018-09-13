@@ -1,6 +1,7 @@
 import argparse
 import json
 import multiprocessing
+import torch
 
 import params
 from model.model import PCCoder
@@ -28,6 +29,9 @@ def solve_problems(problems, method, model, timeout, max_program_len, max_beam_s
     """
     Attempts to predict programs for the given I/O sample sets.
     """
+    # Prevents deadlocks due to torch's problems with multi processes.
+    torch.set_num_threads(1)
+    
     counter = multiprocessing.Value('i', 0)
     fail_counter = multiprocessing.Value('i', 0)
 
