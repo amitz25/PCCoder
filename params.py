@@ -6,7 +6,7 @@ max_list_len = 20
 num_inputs = 3
 num_examples = 5
 
-max_program_len = 5
+max_program_len = 8
 max_program_vars = max_program_len + num_inputs
 state_len = max_program_vars + 1
 

@@ -10,14 +10,7 @@ from env.operator import num_operators
 from model.encoder import DenseEncoder
 
 
-class PCCoder(nn.Module):
-    def __init__(self):
-        super(PCCoder, self).__init__()
-        self.encoder = DenseEncoder()
-        self.statement_head = nn.Linear(params.dense_output_size, num_statements)
-        self.drop_head = nn.Linear(params.dense_output_size, params.max_program_vars)
-        self.operator_head = nn.Linear(params.dense_output_size, num_operators)
-
+class BaseModel(nn.Module):
     def load(self, path):
         if use_cuda:
             params = torch.load(path)
@@ -35,6 +28,15 @@ class PCCoder(nn.Module):
 
     def save(self, path):
         torch.save(self.state_dict(), path)
+
+
+class PCCoder(BaseModel):
+    def __init__(self):
+        super(PCCoder, self).__init__()
+        self.encoder = DenseEncoder()
+        self.statement_head = nn.Linear(params.dense_output_size, num_statements)
+        self.drop_head = nn.Linear(params.dense_output_size, params.max_program_vars)
+        self.operator_head = nn.Linear(params.dense_output_size, num_operators)
 
     def forward(self, x, get_operator_head=True):
         x = self.encoder(x)

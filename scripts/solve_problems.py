@@ -29,9 +29,11 @@ def solve_problems(problems, method, model, timeout, max_program_len, max_beam_s
     """
     Attempts to predict programs for the given I/O sample sets.
     """
-    # Prevents deadlocks due to torch's problems with multi processes.
+    # Prevents deadlocks due to torch's problems with GPUs on multi processes.
+    # This line is here for convenience, but it is recommended to solve problems on CPU since the overhead
+    # in this case is minimal.
     torch.set_num_threads(1)
-    
+
     counter = multiprocessing.Value('i', 0)
     fail_counter = multiprocessing.Value('i', 0)
 
@@ -71,12 +73,12 @@ def solve_problem_worker(data):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--input_path', type=str, required=True)
-    parser.add_argument('--output_path', type=str, required=True)
-    parser.add_argument('--model_path', type=str, required=True)
-    parser.add_argument('--timeout', type=int, required=True)
+    parser.add_argument('input_path', type=str)
+    parser.add_argument('output_path', type=str)
+    parser.add_argument('model_path', type=str)
+    parser.add_argument('timeout', type=int)
+    parser.add_argument('max_program_len', type=int)
     parser.add_argument('--num_workers', type=int, default=None)
-    parser.add_argument('--max_program_len', type=int, required=True)
     parser.add_argument('--max_beam_size', type=int, default=819200)
     parser.add_argument('--search_method', choices=['beam', 'dfs'], default='beam')
 

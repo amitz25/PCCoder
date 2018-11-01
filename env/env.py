@@ -77,7 +77,7 @@ class ProgramEnv(object):
                 if arg.type != statement.input_types[i]:
                     return False
             else:
-                if arg >= self.num_vars or self.var_types[arg] != statement.input_types[i]:
+                if not isinstance(arg, int) or arg >= self.num_vars or self.var_types[arg] != statement.input_types[i]:
                     return False
         return True
 

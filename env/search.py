@@ -132,6 +132,9 @@ def beam_search(env, max_depth, model, beam_size, expansion_size, state):
                 new_beams.append((new_env, statements + [env.statement_to_real_idxs(statement)],
                                   prob * statement_probs[beam_num, statement_index]))
 
+        if len(new_beams) == 0:
+            return FAILED_SOLUTION
+
         new_beams = sorted(new_beams, key=lambda x: x[2], reverse=True)[:beam_size]
         return helper(new_beams, state)
 
