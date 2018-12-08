@@ -64,7 +64,7 @@ LIST|FILTER,EVEN,0|MAP,/2,1|SORT,2|LAST,3
 ```
 
 ## RobustFill
-The full implementation of RobustFill's attention-B variant (https://arxiv.org/abs/1703.07469) for this DSL is inside baseline/robustfill. This is the only public implementation of RobustFill that we are aware of (as of this writing). Since our problem (and DSL) is significantly different from RobustFill's original paper, some alterations were made:
+The full implementation of RobustFill's attention-B variant (https://arxiv.org/abs/1703.07469) for this DSL is inside baseline/robustfill. Since our problem (and DSL) is significantly different from RobustFill's original paper, some alterations were made:
 1. For attention, we use the "concat" variant whereas RobustFill used "general" in their paper (https://arxiv.org/pdf/1508.04025.pdf).
 2. For evaluation, we use an altered version of beam-search that detects the prediction of invalid statements prematurely and significantly improves results. Furthermore, we use CAB instead of a vanilla beam-search with constant-size. 
 3. In order to give the I/O samples as input to the LSTMs (I and O), we encode them similarly to how it is done for PCCoder. Concretely, for each variable, we pass as input '\[', then '0' or '1' (type of var - list of int), then the values of the list number-by-number, and then ']'. The decoder LSTM (P) outputs a program token-by-token, where each token can be either a parameter (number), lambda, or function.
